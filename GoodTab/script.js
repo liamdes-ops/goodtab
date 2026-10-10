@@ -14,17 +14,24 @@ document.querySelectorAll('[data-year]').forEach(node => { node.textContent = ne
 // Give the home headline a mechanical, suit-up arrival without changing its copy.
 const assemblyHeadline = document.querySelector('.home-page .hero-copy h1');
 if (assemblyHeadline) {
-  assemblyHeadline.setAttribute('aria-label', assemblyHeadline.textContent.replace(/\s+/g, ' ').trim());
+  assemblyHeadline.setAttribute('aria-label', assemblyHeadline.getAttribute('aria-label') || assemblyHeadline.textContent.replace(/\s+/g, ' ').trim());
   const walker = document.createTreeWalker(assemblyHeadline, NodeFilter.SHOW_TEXT);
   const textNodes = [];
   while (walker.nextNode()) textNodes.push(walker.currentNode);
   let pieceIndex = 0;
   textNodes.forEach(node => {
     const fragment = document.createDocumentFragment();
+    let word = null;
     for (const character of node.textContent) {
       if (/\s/.test(character)) {
+        if (word) fragment.append(word);
+        word = null;
         fragment.append(document.createTextNode(character));
         continue;
+      }
+      if (!word) {
+        word = document.createElement('span');
+        word.className = 'headline-word';
       }
       const piece = document.createElement('span');
       piece.className = 'headline-piece';
@@ -34,9 +41,10 @@ if (assemblyHeadline) {
       piece.style.setProperty('--flight-y', direction % 2 ? '0px' : `${(direction === 0 ? -1 : 1) * (95 + (pieceIndex % 4) * 22)}px`);
       piece.style.setProperty('--flight-turn', `${pieceIndex % 2 ? '' : '-'}${48 + (pieceIndex % 4) * 17}deg`);
       piece.style.setProperty('--piece-delay', `${480 + pieceIndex * 18}ms`);
-      fragment.append(piece);
+      word.append(piece);
       pieceIndex += 1;
     }
+    if (word) fragment.append(word);
     node.replaceWith(fragment);
   });
 }
