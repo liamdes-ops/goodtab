@@ -78,7 +78,10 @@ if (assemblyHeadings.length) {
     const page = ['work', 'services', 'about', 'contact'].find(name => document.body.classList.contains(`${name}-page`));
     const directions = assemblyDirections[page] || assemblyDirections.work;
     heading.classList.add('assembly-heading');
-    heading.setAttribute('aria-label', heading.textContent.replace(/\s+/g, ' ').trim());
+    const accessibleHeading = heading.cloneNode(true);
+    accessibleHeading.querySelectorAll('.work-rocket').forEach(rocket => rocket.remove());
+    accessibleHeading.querySelectorAll('br').forEach(lineBreak => lineBreak.replaceWith(document.createTextNode(' ')));
+    heading.setAttribute('aria-label', accessibleHeading.textContent.replace(/\s+/g, ' ').trim());
 
     const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
     const textNodes = [];
