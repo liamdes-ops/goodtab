@@ -49,40 +49,50 @@ if (assemblyHeadline) {
   });
 }
 
-// On the inner pages, each heading gathers its letters from the top, right,
-// bottom, and left. The homepage headline keeps its separate animation above.
-const assemblySelectors = [
-  '.work-page .page-hero h1, .work-page .center-cta h2',
-  '.services-page .page-hero h1, .services-page .offer-heading h2, .services-page .process-layout h2, .services-page .faq-layout h2, .services-page .center-cta h2',
-  '.about-page .page-hero h1, .about-page .about-copy h2, .about-page .center-cta h2',
-  '.contact-page .page-hero h1, .contact-page .contact-copy h2'
-].join(', ');
-const assemblyDirections = {
-  work: [[0, -72], [82, 0], [0, 72], [-82, 0]],
-  services: [[-82, 0], [0, 72], [82, 0], [0, -72]],
-  about: [[0, 72], [-82, 0], [0, -72], [82, 0]],
-  contact: [[82, 0], [0, -72], [-82, 0], [0, 72]]
+// Keep the home headline's suit-up effect separate. Every inner-page heading
+// gets its own motion style; the Work hero title is released by the rocket burst.
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const page = ['home', 'work', 'services', 'about', 'contact'].find(name => document.body.classList.contains(`${name}-page`));
+const pageOffsets = { home: 2, work: 0, services: 1, about: 2, contact: 3 };
+const headingStyles = ['gather', 'tilt', 'blur', 'snap', 'sweep', 'orbit'];
+const headingDirections = {
+  home: [[0, -86], [86, 0], [0, 86], [-86, 0]],
+  work: [[0, -86], [86, 0], [0, 86], [-86, 0]],
+  services: [[-86, 0], [0, 86], [86, 0], [0, -86]],
+  about: [[0, 86], [-86, 0], [0, -86], [86, 0]],
+  contact: [[86, 0], [0, -86], [-86, 0], [0, 86]]
 };
-const assemblyHeadings = document.querySelectorAll(assemblySelectors);
-if (assemblyHeadings.length) {
-  const assemblyObserver = new IntersectionObserver(entries => {
+if (!reducedMotion && page) {
+  const headings = document.querySelectorAll(page === 'home'
+    ? '.home-page h2, .home-page h3'
+    : `.${page}-page h1, .${page}-page h2, .${page}-page h3`);
+  const headingObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('is-assembling');
-        assemblyObserver.unobserve(entry.target);
+        entry.target.classList.add(entry.target.matches('h3') ? 'is-heading-visible' : 'is-assembling');
+        headingObserver.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.25 });
+  }, { threshold: 0.2 });
 
-  assemblyHeadings.forEach((heading, headingIndex) => {
-    const page = ['work', 'services', 'about', 'contact'].find(name => document.body.classList.contains(`${name}-page`));
-    const directions = assemblyDirections[page] || assemblyDirections.work;
+  headings.forEach((heading, headingIndex) => {
+    const styleName = headingStyles[(headingIndex + pageOffsets[page]) % headingStyles.length];
+    heading.classList.add('heading-motion', `heading-motion--${styleName}`);
+    heading.style.setProperty('--heading-delay', `${(headingIndex % 3) * 80}ms`);
+
+    // Home h2s keep their existing nested emphasis and get a distinct whole-heading reveal.
+    if (heading.matches('h3') || page === 'home') {
+      headingObserver.observe(heading);
+      return;
+    }
+
     heading.classList.add('assembly-heading');
     const accessibleHeading = heading.cloneNode(true);
     accessibleHeading.querySelectorAll('.work-rocket').forEach(rocket => rocket.remove());
     accessibleHeading.querySelectorAll('br').forEach(lineBreak => lineBreak.replaceWith(document.createTextNode(' ')));
     heading.setAttribute('aria-label', accessibleHeading.textContent.replace(/\s+/g, ' ').trim());
 
+    const directions = headingDirections[page] || headingDirections.work;
     const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
     const textNodes = [];
     while (walker.nextNode()) textNodes.push(walker.currentNode);
@@ -102,24 +112,79 @@ if (assemblyHeadings.length) {
           word.className = 'assembly-word';
         }
         const letter = document.createElement('span');
-        const [x, y] = directions[letterIndex % directions.length];
+        const [x, y] = directions[(letterIndex + headingIndex) % directions.length];
         letter.className = 'assembly-letter';
         letter.textContent = character;
-        letter.style.setProperty('--assembly-x', `${x + (letterIndex % 3) * (x === 0 ? 0 : Math.sign(x) * 8)}px`);
-        letter.style.setProperty('--assembly-y', `${y + (letterIndex % 3) * (y === 0 ? 0 : Math.sign(y) * 8)}px`);
-        letter.style.setProperty('--assembly-turn', `${letterIndex % 2 ? 14 : -14}deg`);
-        letter.style.setProperty('--assembly-delay', `${70 + letterIndex * 16 + headingIndex * 90}ms`);
+        letter.style.setProperty('--assembly-x', `${x + Math.sign(x) * (letterIndex % 3) * 9}px`);
+        letter.style.setProperty('--assembly-y', `${y + Math.sign(y) * (letterIndex % 3) * 9}px`);
+        letter.style.setProperty('--assembly-turn', `${letterIndex % 2 ? 16 : -16}deg`);
+        letter.style.setProperty('--assembly-delay', `${50 + letterIndex * 15 + (headingIndex % 3) * 80}ms`);
         word.append(letter);
         letterIndex += 1;
       }
       if (word) fragment.append(word);
       node.replaceWith(fragment);
     });
-    assemblyObserver.observe(heading);
+
+    const rocket = page === 'work' && heading.matches('.page-hero h1')
+      ? heading.querySelector('.work-rocket')
+      : null;
+    if (rocket) {
+      heading.classList.add('rocket-title');
+      rocket.addEventListener('animationend', event => {
+        if (event.target !== rocket || event.animationName !== 'rocket-flight') return;
+        const blast = rocket.getBoundingClientRect();
+        const originX = blast.left + blast.width / 2;
+        const originY = blast.top + blast.height / 2;
+        const headingBox = heading.getBoundingClientRect();
+        heading.style.setProperty('--rocket-blast-left', `${originX - headingBox.left}px`);
+        heading.style.setProperty('--rocket-blast-top', `${originY - headingBox.top}px`);
+        heading.classList.add('rocket-blast-active');
+
+        // Throw visible shards outward first. The letters then emerge from their scattered positions.
+        const shardCount = 8;
+        for (let shardIndex = 0; shardIndex < shardCount; shardIndex += 1) {
+          const angle = (Math.PI * 2 * shardIndex) / shardCount - Math.PI / 8;
+          const distance = 30 + (shardIndex % 3) * 13;
+          const shard = document.createElement('span');
+          shard.className = 'rocket-shard';
+          shard.setAttribute('aria-hidden', 'true');
+          shard.style.setProperty('--shard-x', `${Math.cos(angle) * distance}px`);
+          shard.style.setProperty('--shard-y', `${Math.sin(angle) * distance}px`);
+          shard.style.setProperty('--shard-turn', `${(shardIndex % 2 ? 1 : -1) * (70 + shardIndex * 13)}deg`);
+          shard.style.setProperty('--shard-delay', `${shardIndex * 15}ms`);
+          heading.append(shard);
+        }
+
+        heading.querySelectorAll('.assembly-letter').forEach((letter, index) => {
+          const box = letter.getBoundingClientRect();
+          const angle = index * 2.399 + Math.PI / 5;
+          const radius = 10 + (index % 4) * 8;
+          const fragmentX = originX + Math.cos(angle) * radius;
+          const fragmentY = originY + Math.sin(angle) * radius;
+          const x = fragmentX - (box.left + box.width / 2);
+          const y = fragmentY - (box.top + box.height / 2);
+          letter.style.setProperty('--rocket-origin-x', `${x}px`);
+          letter.style.setProperty('--rocket-origin-y', `${y}px`);
+          letter.style.setProperty('--rocket-mid-x', `${x * 0.56}px`);
+          letter.style.setProperty('--rocket-mid-y', `${y * 0.56}px`);
+          letter.style.setProperty('--rocket-overshoot-x', `${x * -0.12}px`);
+          letter.style.setProperty('--rocket-overshoot-y', `${y * -0.12}px`);
+          letter.style.setProperty('--rocket-letter-delay', `${Math.min(index * 13, 520)}ms`);
+          letter.style.setProperty('--rocket-letter-turn', `${index % 2 ? 16 : -16}deg`);
+        });
+        window.setTimeout(() => heading.classList.add('rocket-text-released'), 360);
+        window.setTimeout(() => {
+          heading.classList.remove('rocket-blast-active');
+          heading.querySelectorAll('.rocket-shard').forEach(shard => shard.remove());
+        }, 620);
+      });
+    } else {
+      headingObserver.observe(heading);
+    }
   });
 }
 
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reducedMotion && document.body.classList.contains('home-page')) {
   document.documentElement.classList.add('js-motion');
   const homeTargets = document.querySelectorAll(

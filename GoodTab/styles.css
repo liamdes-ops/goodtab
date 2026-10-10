@@ -249,3 +249,39 @@ body .hero-lede,.page-hero-row>p,.about-copy>p:not(.large-copy),.belief-grid p,.
 .work-page .assembly-heading.is-assembling .assembly-letter{animation-delay:calc(var(--assembly-delay,0ms) + 1100ms)}
 @keyframes rocket-flight{0%{opacity:0;transform:translate(-30px,70px) rotate(-32deg) scale(.55)}14%{opacity:1}72%{opacity:1;transform:translate(clamp(220px,34vw,420px),-70px) rotate(-32deg) scale(1)}82%{opacity:1;transform:translate(clamp(220px,34vw,420px),-70px) rotate(-32deg) scale(1.35);filter:drop-shadow(0 0 22px #d1b1ec)}100%{opacity:0;transform:translate(clamp(220px,34vw,420px),-70px) rotate(-32deg) scale(2.5)}}
 @keyframes rocket-flare{0%,70%{opacity:0;transform:scale(.1)}82%{opacity:1;transform:scale(.75);box-shadow:0 0 18px 5px #c49be477}92%{opacity:.9;transform:scale(1.55);box-shadow:18px -12px 0 -4px #e1c5f5,-16px -8px 0 -5px #b999d9,-12px 14px 0 -4px #cfabe8,15px 16px 0 -5px #e0ceef,0 0 28px 10px #a982cb77}100%{opacity:0;transform:scale(2.8);box-shadow:18px -12px 0 -4px #e1c5f500,-16px -8px 0 -5px #b999d900,-12px 14px 0 -4px #cfabe800,15px 16px 0 -5px #e0ceef00,0 0 40px 14px #a982cb00}}
+
+/* Give every inner-page heading a distinct motion language. */
+.heading-motion--gather.is-assembling .assembly-letter{animation-name:assemble-work;animation-duration:.88s}
+.heading-motion--tilt.is-assembling .assembly-letter{animation-name:assemble-services;animation-duration:.82s}
+.heading-motion--blur.is-assembling .assembly-letter{animation-name:assemble-about;animation-duration:1s}
+.heading-motion--snap.is-assembling .assembly-letter{animation-name:assemble-contact;animation-duration:.7s}
+.heading-motion--sweep.is-assembling .assembly-letter{animation-name:assemble-sweep;animation-duration:.76s}
+.heading-motion--orbit.is-assembling .assembly-letter{animation-name:assemble-orbit;animation-duration:1.04s}
+@keyframes assemble-sweep{0%{opacity:0;transform:translate3d(var(--assembly-x),var(--assembly-y),0) skewX(16deg) scale(.76);clip-path:inset(0 100% 0 0);filter:blur(5px)}62%{opacity:1;transform:translate3d(0,0,0) skewX(-3deg) scale(1.04);clip-path:inset(0);filter:none}100%{opacity:1;transform:none;clip-path:inset(0);filter:none}}
+@keyframes assemble-orbit{0%{opacity:0;transform:translate3d(var(--assembly-x),var(--assembly-y),0) rotate(var(--assembly-turn)) scale(.3);filter:blur(8px)}55%{opacity:1;transform:translate3d(0,0,0) rotate(8deg) scale(1.12);filter:blur(0)}78%{transform:translate3d(0,0,0) rotate(-3deg) scale(.97)}100%{opacity:1;transform:none;filter:none}}
+.heading-motion--gather.is-heading-visible{animation:heading-rise .72s var(--heading-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+.heading-motion--tilt.is-heading-visible{animation:heading-flip .9s var(--heading-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+.heading-motion--blur.is-heading-visible{animation:heading-focus 1s var(--heading-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+.heading-motion--snap.is-heading-visible{animation:heading-snap .62s var(--heading-delay,0ms) cubic-bezier(.2,1.5,.4,1) both}
+.heading-motion--sweep.is-heading-visible{animation:heading-sweep .8s var(--heading-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+.heading-motion--orbit.is-heading-visible{animation:heading-orbit 1.05s var(--heading-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+.heading-motion.heading-motion--gather.is-heading-visible,.heading-motion.heading-motion--tilt.is-heading-visible,.heading-motion.heading-motion--blur.is-heading-visible,.heading-motion.heading-motion--snap.is-heading-visible,.heading-motion.heading-motion--sweep.is-heading-visible,.heading-motion.heading-motion--orbit.is-heading-visible{will-change:transform,opacity,filter,clip-path}
+h3.heading-motion,.home-page h2.heading-motion{opacity:0}
+@keyframes heading-rise{from{opacity:0;transform:translateY(32px) scale(.94);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@keyframes heading-flip{0%{opacity:0;transform:perspective(600px) rotateX(50deg) translateY(18px)}72%{opacity:1;transform:perspective(600px) rotateX(-6deg) translateY(0)}100%{opacity:1;transform:none}}
+@keyframes heading-focus{0%{opacity:0;transform:scale(.82) translateY(-12px);filter:blur(12px)}68%{opacity:1;transform:scale(1.05);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@keyframes heading-snap{0%{opacity:0;transform:translateX(-30px) scale(.85)}70%{opacity:1;transform:translateX(5px) scale(1.08)}100%{opacity:1;transform:none}}
+@keyframes heading-sweep{0%{opacity:0;transform:translateX(36px);clip-path:inset(0 0 0 100%)}100%{opacity:1;transform:none;clip-path:inset(0)}}
+@keyframes heading-orbit{0%{opacity:0;transform:rotate(-7deg) translateY(24px) scale(.9);filter:blur(5px)}65%{opacity:1;transform:rotate(2deg) translateY(-3px) scale(1.04);filter:none}100%{opacity:1;transform:none;filter:none}}
+
+/* Hide the Work title until the rocket bursts; its shards then resolve into the letters. */
+.work-page .rocket-title .assembly-letter{opacity:0;color:#e5d4f1}
+.work-page .rocket-title:after{content:"";position:absolute;z-index:4;left:var(--rocket-blast-left,0px);top:var(--rocket-blast-top,0px);width:18px;height:18px;border:1px solid #f0dcff;border-radius:50%;opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.1);filter:blur(.2px)}
+.work-page .rocket-title.rocket-blast-active:after{animation:rocket-text-blast .42s ease-out both}
+.work-page .rocket-shard{position:absolute;z-index:5;left:var(--rocket-blast-left,0px);top:var(--rocket-blast-top,0px);width:4px;height:11px;border-radius:2px;background:linear-gradient(#f0dcff,#a97dd1);box-shadow:0 0 12px #c69ce9;opacity:0;pointer-events:none;transform:translate(-50%,-50%)}
+.work-page .rocket-title.rocket-blast-active .rocket-shard{animation:rocket-shard-out .5s var(--shard-delay,0ms) cubic-bezier(.12,.68,.22,1) both}
+.work-page .rocket-title.rocket-text-released .assembly-letter{animation:rocket-fragment-to-letter 1.05s var(--rocket-letter-delay,0ms) cubic-bezier(.16,1,.3,1) both}
+@keyframes rocket-text-blast{0%{opacity:0;transform:translate(-50%,-50%) scale(.1);box-shadow:0 0 0 0 #cfabe800}24%{opacity:1;transform:translate(-50%,-50%) scale(.7);box-shadow:0 0 18px 9px #d9b9f077,0 0 42px 18px #ab80d255}100%{opacity:0;transform:translate(-50%,-50%) scale(2.8);box-shadow:0 0 44px 20px #ab80d200}}
+@keyframes rocket-shard-out{0%{opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(0)}16%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--shard-x)),calc(-50% + var(--shard-y))) scale(.7) rotate(var(--shard-turn))}}
+@keyframes rocket-fragment-to-letter{0%{opacity:0;transform:translate3d(var(--rocket-origin-x),var(--rocket-origin-y),0) rotate(var(--rocket-letter-turn)) scale(.12);filter:blur(8px);text-shadow:0 0 20px #caa8e7}14%{opacity:1;transform:translate3d(var(--rocket-origin-x),var(--rocket-origin-y),0) rotate(var(--rocket-letter-turn)) scale(.42);filter:blur(2px)}40%{opacity:1;transform:translate3d(var(--rocket-mid-x),var(--rocket-mid-y),0) rotate(calc(var(--rocket-letter-turn) * 1.8)) scale(.82);filter:blur(.4px);text-shadow:0 0 20px #bd9bdd}58%{transform:translate3d(var(--rocket-overshoot-x),var(--rocket-overshoot-y),0) rotate(-7deg) scale(1.1);text-shadow:0 0 10px #bd9bdd66}100%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:none;text-shadow:none}}
+@media(prefers-reduced-motion:reduce){.heading-motion,.heading-motion .assembly-letter,.work-page .rocket-title .assembly-letter,.work-page .rocket-title:after,.work-page .rocket-shard{animation:none!important;opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;will-change:auto!important;text-shadow:none!important}}
