@@ -49,6 +49,73 @@ if (assemblyHeadline) {
   });
 }
 
+// On the inner pages, each heading gathers its letters from the top, right,
+// bottom, and left. The homepage headline keeps its separate animation above.
+const assemblySelectors = [
+  '.work-page .page-hero h1, .work-page .center-cta h2',
+  '.services-page .page-hero h1, .services-page .offer-heading h2, .services-page .process-layout h2, .services-page .faq-layout h2, .services-page .center-cta h2',
+  '.about-page .page-hero h1, .about-page .about-copy h2, .about-page .center-cta h2',
+  '.contact-page .page-hero h1, .contact-page .contact-copy h2'
+].join(', ');
+const assemblyDirections = {
+  work: [[0, -72], [82, 0], [0, 72], [-82, 0]],
+  services: [[-82, 0], [0, 72], [82, 0], [0, -72]],
+  about: [[0, 72], [-82, 0], [0, -72], [82, 0]],
+  contact: [[82, 0], [0, -72], [-82, 0], [0, 72]]
+};
+const assemblyHeadings = document.querySelectorAll(assemblySelectors);
+if (assemblyHeadings.length) {
+  const assemblyObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-assembling');
+        assemblyObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  assemblyHeadings.forEach((heading, headingIndex) => {
+    const page = ['work', 'services', 'about', 'contact'].find(name => document.body.classList.contains(`${name}-page`));
+    const directions = assemblyDirections[page] || assemblyDirections.work;
+    heading.classList.add('assembly-heading');
+    heading.setAttribute('aria-label', heading.textContent.replace(/\s+/g, ' ').trim());
+
+    const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    let letterIndex = 0;
+    textNodes.forEach(node => {
+      const fragment = document.createDocumentFragment();
+      let word = null;
+      for (const character of node.textContent) {
+        if (/\s/.test(character)) {
+          if (word) fragment.append(word);
+          word = null;
+          fragment.append(document.createTextNode(character));
+          continue;
+        }
+        if (!word) {
+          word = document.createElement('span');
+          word.className = 'assembly-word';
+        }
+        const letter = document.createElement('span');
+        const [x, y] = directions[letterIndex % directions.length];
+        letter.className = 'assembly-letter';
+        letter.textContent = character;
+        letter.style.setProperty('--assembly-x', `${x + (letterIndex % 3) * (x === 0 ? 0 : Math.sign(x) * 8)}px`);
+        letter.style.setProperty('--assembly-y', `${y + (letterIndex % 3) * (y === 0 ? 0 : Math.sign(y) * 8)}px`);
+        letter.style.setProperty('--assembly-turn', `${letterIndex % 2 ? 14 : -14}deg`);
+        letter.style.setProperty('--assembly-delay', `${70 + letterIndex * 16 + headingIndex * 90}ms`);
+        word.append(letter);
+        letterIndex += 1;
+      }
+      if (word) fragment.append(word);
+      node.replaceWith(fragment);
+    });
+    assemblyObserver.observe(heading);
+  });
+}
+
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reducedMotion && document.body.classList.contains('home-page')) {
   document.documentElement.classList.add('js-motion');
