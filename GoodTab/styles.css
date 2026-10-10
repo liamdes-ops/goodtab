@@ -302,3 +302,55 @@ h3.heading-motion,.home-page h2.heading-motion{opacity:0}
 @keyframes about-fold-in{0%{opacity:0;clip-path:inset(0 0 100% 0);transform:perspective(700px) translate3d(var(--assembly-x),var(--assembly-y),0) rotateY(var(--about-fold)) rotateX(14deg) scale(.72);filter:blur(9px)}68%{opacity:1;clip-path:inset(0);transform:perspective(700px) translate3d(0,0,0) rotateY(-8deg) rotateX(0) scale(1.07);filter:blur(0)}100%{opacity:1;clip-path:inset(0);transform:perspective(700px) translate3d(0,0,0) rotateY(0) rotateX(0) scale(1);filter:none}}
 @keyframes about-value-wipe{0%{opacity:0;clip-path:inset(0 0 0 100%);transform:translate3d(24px,0,0);filter:blur(5px);letter-spacing:.12em}66%{opacity:1;clip-path:inset(0);transform:translate3d(-3px,0,0);filter:none}100%{opacity:1;clip-path:inset(0);transform:none;filter:none;letter-spacing:normal}}
 @media(prefers-reduced-motion:reduce){.home-page h2.home-section-heading.is-heading-visible,.home-page h3.home-card-heading.is-heading-visible,.services-page .services-blueprint-heading.is-assembling .assembly-letter,.services-page h3.services-card-heading.is-heading-visible,.about-page .about-fold-heading.is-assembling .assembly-letter,.about-page h3.about-value-heading.is-heading-visible{animation:none!important;opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;text-shadow:none!important;will-change:auto!important}}
+
+/* Fix heading overflow and keep text intact while page motion runs. */
+.page-hero-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.36fr);gap:clamp(30px,4vw,56px);align-items:end}
+.page-hero-row>h1{min-width:0;max-width:100%;font-size:clamp(56px,6.5vw,90px);animation:none}
+.page-hero-row>p{min-width:0;width:100%;max-width:310px}
+@media(max-width:900px){.page-hero-row{grid-template-columns:minmax(0,1fr);gap:20px}.page-hero-row>h1{max-width:850px}.page-hero-row>p{max-width:560px}}
+@media(max-width:650px){.page-hero-row{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}.page-hero-row>h1{font-size:clamp(48px,12.5vw,72px)}.page-hero-row>p{max-width:100%}}
+.home-page .hero-copy h1 .headline-piece{display:contents!important;animation:none!important;opacity:1!important;transform:none!important;filter:none!important;white-space:normal!important}
+.home-page .hero-copy h1 .headline-word{display:inline;white-space:normal}
+.work-page .assembly-heading:not(.rocket-title) .assembly-letter,.services-page .assembly-heading .assembly-letter,.about-page .assembly-heading .assembly-letter,.contact-page .assembly-heading .assembly-letter{display:contents!important;animation:none!important;opacity:1!important;transform:none!important;filter:none!important;text-shadow:none!important;will-change:auto!important}
+.assembly-heading:not(.rocket-title) .assembly-word,.services-page .assembly-word,.about-page .assembly-word,.contact-page .assembly-word{display:inline;white-space:normal}
+
+/* The page heroes open different windows into space; Work keeps the rocket burst. */
+.home-page .hero-copy h1{position:relative;isolation:isolate}
+.home-page .hero-copy h1:before{content:"";position:absolute;z-index:-1;left:54%;top:50%;width:48%;aspect-ratio:1;border:1px solid #c6a1ef66;border-radius:50%;box-shadow:0 0 36px #a87dcc33,inset 0 0 35px #a87dcc22;opacity:0;pointer-events:none;animation:home-eclipse-open 1.4s .12s ease-out both}
+.services-page .page-hero h1,.about-page .page-hero h1,.contact-page .page-hero h1{position:relative;isolation:isolate}
+.services-page .page-hero h1:before,.about-page .page-hero h1:before,.contact-page .page-hero h1:before,.services-page .page-hero h1:after,.about-page .page-hero h1:after,.contact-page .page-hero h1:after{content:"";position:absolute;z-index:-1;pointer-events:none;opacity:0}
+.services-page .page-hero h1:before{left:54%;top:47%;width:min(68vw,560px);aspect-ratio:1;border:1px solid #c5a4e77a;border-radius:50%;box-shadow:0 0 24px #a87dcc55,inset 0 0 36px #b994d822}
+.services-page .page-hero h1:after{left:7%;right:4%;top:48%;height:2px;background:linear-gradient(90deg,transparent,#f0dcff,transparent);filter:drop-shadow(0 0 7px #c49be4)}
+.services-page .services-blueprint-heading.is-assembling{animation:services-wormhole-title 1.25s cubic-bezier(.16,1,.3,1) both}
+.services-page .page-hero h1.is-assembling:before{animation:services-wormhole-ring 1.45s ease-out both}
+.services-page .page-hero h1.is-assembling:after{animation:services-wormhole-flare .7s .28s ease-out both}
+.about-page .page-hero h1:before{inset:-18% -7%;background:radial-gradient(circle at 7% 18%,#f0dcff 0 2px,transparent 3px),radial-gradient(circle at 24% 82%,#c69fea 0 2px,transparent 3px),radial-gradient(circle at 48% 12%,#f0dcff 0 2px,transparent 3px),radial-gradient(circle at 71% 65%,#c69fea 0 2px,transparent 3px),radial-gradient(circle at 91% 24%,#f0dcff 0 2px,transparent 3px),linear-gradient(28deg,transparent 20%,#bb96dc44 20.15%,transparent 20.4%,transparent 53%,#bb96dc44 53.15%,transparent 53.4%),linear-gradient(145deg,transparent 37%,#bb96dc33 37.15%,transparent 37.4%);filter:drop-shadow(0 0 5px #bd91e8)}
+.about-page .page-hero h1:after{left:-5%;right:-5%;top:50%;height:1px;background:linear-gradient(90deg,transparent,#cba8ecaa,transparent);transform:rotate(-8deg)}
+.about-page .about-fold-heading.is-assembling{animation:about-constellation-title 1.25s cubic-bezier(.16,1,.3,1) both}
+.about-page .page-hero h1.is-assembling:before{animation:about-star-map .95s ease-out both}
+.about-page .page-hero h1.is-assembling:after{animation:about-starlane 1.15s .12s ease-out both}
+.contact-page .page-hero h1:before,.contact-page .page-hero h1:after{left:52%;top:50%;width:42%;aspect-ratio:1;border:1px solid #bd9be577;border-radius:50%;box-shadow:0 0 18px #ad88d433}
+.contact-page .page-hero h1:after{width:58%;border-color:#e5cef477}
+.contact-page .page-hero h1.is-assembling{animation:contact-signal-title 1.1s cubic-bezier(.16,1,.3,1) both}
+.contact-page .page-hero h1.is-assembling:before{animation:contact-signal-ring 1.05s ease-out both}
+.contact-page .page-hero h1.is-assembling:after{animation:contact-signal-ring 1.3s .16s ease-out both}
+
+/* Scroll headings animate as a unit, so their letters never drift out of place. */
+.work-page .assembly-heading:not(.rocket-title).is-assembling{animation:work-star-warp .95s cubic-bezier(.16,1,.3,1) both}
+.services-page h2.services-blueprint-heading.is-assembling{animation:services-heading-pulse 1s cubic-bezier(.16,1,.3,1) both}
+.about-page h2.about-fold-heading.is-assembling{animation:about-heading-fold 1s cubic-bezier(.16,1,.3,1) both}
+.contact-page h2.assembly-heading.is-assembling{animation:contact-heading-signal .9s cubic-bezier(.16,1,.3,1) both}
+@keyframes home-eclipse-open{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}30%{opacity:.8}100%{opacity:0;transform:translate(-50%,-50%) scale(1.8)}}
+@keyframes services-wormhole-title{0%{opacity:0;transform:scale(.9) translateY(22px);filter:blur(18px);text-shadow:0 0 30px #c69fea}50%{opacity:1;transform:scale(1.03);filter:blur(0);text-shadow:0 0 22px #c69fea88}76%{transform:scale(.99)}100%{opacity:1;transform:none;filter:none;text-shadow:none}}
+@keyframes services-wormhole-ring{0%{opacity:0;transform:translate(-50%,-50%) rotate(-28deg) scale(.05)}25%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) rotate(38deg) scale(1.7)}}
+@keyframes services-wormhole-flare{0%{opacity:0;transform:scaleX(.02)}30%{opacity:.9}100%{opacity:0;transform:scaleX(1.4)}}
+@keyframes about-constellation-title{0%{opacity:0;transform:translateY(26px) rotateX(14deg) scale(.96);filter:blur(12px)}58%{opacity:1;transform:translateY(-3px) rotateX(0) scale(1.015);filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
+@keyframes about-star-map{0%{opacity:0;clip-path:inset(0 100% 0 0);filter:blur(8px)}35%{opacity:1}100%{opacity:.8;clip-path:inset(0);filter:drop-shadow(0 0 5px #bd91e8)}}
+@keyframes about-starlane{0%{opacity:0;transform:rotate(-8deg) scaleX(.1)}35%{opacity:.9}100%{opacity:0;transform:rotate(-8deg) scaleX(1.2)}}
+@keyframes contact-signal-title{0%{opacity:0;transform:translateX(-24px) skewX(4deg);filter:blur(10px);text-shadow:18px 0 #c19be655,-18px 0 #9a79b855}58%{opacity:1;transform:translateX(2px) skewX(-1deg);filter:blur(0)}100%{opacity:1;transform:none;filter:none;text-shadow:none}}
+@keyframes contact-signal-ring{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}25%{opacity:.9}100%{opacity:0;transform:translate(-50%,-50%) scale(2.1)}}
+@keyframes services-heading-pulse{0%{opacity:0;transform:scale(.92);filter:blur(8px);text-shadow:0 0 20px #be9ce0}70%{opacity:1;transform:scale(1.025);filter:none;text-shadow:0 0 14px #be9ce077}100%{opacity:1;transform:none;text-shadow:none}}
+@keyframes about-heading-fold{0%{opacity:0;transform:perspective(700px) rotateX(16deg) translateY(14px);clip-path:inset(0 0 100% 0);filter:blur(6px)}100%{opacity:1;transform:none;clip-path:inset(0);filter:none}}
+@keyframes contact-heading-signal{0%{opacity:0;transform:translateX(-18px) skewX(3deg);filter:blur(7px)}60%{opacity:1;transform:translateX(2px) skewX(-1deg);filter:none}100%{opacity:1;transform:none}}
+@keyframes work-star-warp{0%{opacity:0;transform:perspective(700px) rotateY(16deg) translateY(18px) scale(.92);filter:blur(8px)}70%{opacity:1;transform:perspective(700px) rotateY(-3deg) translateY(0) scale(1.02);filter:none}100%{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.home-page .hero-copy h1 .headline-piece,.services-page .page-hero h1,.about-page .page-hero h1,.contact-page .page-hero h1,.work-page .assembly-heading:not(.rocket-title),.services-page h2.services-blueprint-heading,.about-page h2.about-fold-heading,.contact-page h2.assembly-heading{animation:none!important;opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important;text-shadow:none!important}.services-page .page-hero h1:before,.services-page .page-hero h1:after,.about-page .page-hero h1:before,.about-page .page-hero h1:after,.contact-page .page-hero h1:before,.contact-page .page-hero h1:after,.home-page .hero-copy h1:before{animation:none!important;opacity:0!important}}
