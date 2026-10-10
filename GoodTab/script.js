@@ -11,6 +11,36 @@ nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => 
 }));
 document.querySelectorAll('[data-year]').forEach(node => { node.textContent = new Date().getFullYear(); });
 
+// Give the home headline a mechanical, suit-up arrival without changing its copy.
+const assemblyHeadline = document.querySelector('.home-page .hero-copy h1');
+if (assemblyHeadline) {
+  assemblyHeadline.setAttribute('aria-label', assemblyHeadline.textContent.replace(/\s+/g, ' ').trim());
+  const walker = document.createTreeWalker(assemblyHeadline, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  let pieceIndex = 0;
+  textNodes.forEach(node => {
+    const fragment = document.createDocumentFragment();
+    for (const character of node.textContent) {
+      if (/\s/.test(character)) {
+        fragment.append(document.createTextNode(character));
+        continue;
+      }
+      const piece = document.createElement('span');
+      piece.className = 'headline-piece';
+      piece.textContent = character;
+      const direction = pieceIndex % 4;
+      piece.style.setProperty('--flight-x', direction % 2 ? `${(direction === 1 ? 1 : -1) * (105 + (pieceIndex % 5) * 17)}px` : '0px');
+      piece.style.setProperty('--flight-y', direction % 2 ? '0px' : `${(direction === 0 ? -1 : 1) * (95 + (pieceIndex % 4) * 22)}px`);
+      piece.style.setProperty('--flight-turn', `${pieceIndex % 2 ? '' : '-'}${48 + (pieceIndex % 4) * 17}deg`);
+      piece.style.setProperty('--piece-delay', `${480 + pieceIndex * 18}ms`);
+      fragment.append(piece);
+      pieceIndex += 1;
+    }
+    node.replaceWith(fragment);
+  });
+}
+
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (!reducedMotion && document.body.classList.contains('home-page')) {
   document.documentElement.classList.add('js-motion');
