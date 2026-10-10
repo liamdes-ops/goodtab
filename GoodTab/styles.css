@@ -75,8 +75,9 @@ body{background:var(--paper);color:var(--text);font-size:16px;line-height:1.65}
 .home-page .hero-copy h1 .headline-piece{display:inline-block;white-space:pre;transform-origin:center;animation:headline-assembly 1.25s var(--piece-delay) cubic-bezier(.16,1,.3,1) both}
 @keyframes headline-assembly{0%{opacity:0;transform:translate3d(var(--flight-x),var(--flight-y),0) rotate(var(--flight-turn)) scale(.35);filter:blur(7px)}68%{opacity:1;transform:translate3d(0,0,0) rotate(-5deg) scale(1.08);filter:blur(0)}84%{transform:translate3d(0,0,0) rotate(2deg) scale(.97)}100%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){.home-page .hero-copy h1 .headline-piece{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}}
-.home-page .hero{grid-template-columns:minmax(0,1fr)}
+.home-page .hero{grid-template-columns:minmax(0,1fr);min-height:520px;padding-top:32px;padding-bottom:76px}
 .home-page .hero-copy{width:100%;max-width:900px}
+@media(max-width:650px){.home-page .hero{min-height:0;padding-top:44px;padding-bottom:74px}}
 /* Additional legibility for supporting copy and controls */
 .page-hero-row>p,.about-copy>p:not(.large-copy),.belief-grid p,.contact-reassurance p,.contact-reassurance a,.concept-note p,.faq-list summary,.contact-page-contact .contact-copy .under-link{font-size:15px;line-height:1.7;color:#c1c7bd}
 .scroll-cue,.announcement,.ticker-track,.floating-cta span,.about-stamp small,.contact-bubble span{font-size:12px}
