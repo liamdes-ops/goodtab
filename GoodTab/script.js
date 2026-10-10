@@ -80,6 +80,14 @@ if (!reducedMotion && page) {
     heading.classList.add('heading-motion', `heading-motion--${styleName}`);
     heading.style.setProperty('--heading-delay', `${(headingIndex % 3) * 80}ms`);
 
+    if (page === 'home') {
+      heading.classList.add(heading.matches('h3') ? 'home-card-heading' : 'home-section-heading');
+    } else if (page === 'services') {
+      heading.classList.add(heading.matches('h3') ? 'services-card-heading' : 'services-blueprint-heading');
+    } else if (page === 'about') {
+      heading.classList.add(heading.matches('h3') ? 'about-value-heading' : 'about-fold-heading');
+    }
+
     // Home h2s keep their existing nested emphasis and get a distinct whole-heading reveal.
     if (heading.matches('h3') || page === 'home') {
       headingObserver.observe(heading);
@@ -119,6 +127,8 @@ if (!reducedMotion && page) {
         letter.style.setProperty('--assembly-y', `${y + Math.sign(y) * (letterIndex % 3) * 9}px`);
         letter.style.setProperty('--assembly-turn', `${letterIndex % 2 ? 16 : -16}deg`);
         letter.style.setProperty('--assembly-delay', `${50 + letterIndex * 15 + (headingIndex % 3) * 80}ms`);
+        letter.style.setProperty('--services-origin-y', `${(letterIndex % 2 ? 1 : -1) * (30 + (letterIndex % 4) * 9)}px`);
+        letter.style.setProperty('--about-fold', `${letterIndex % 2 ? 72 : -72}deg`);
         word.append(letter);
         letterIndex += 1;
       }
