@@ -55,7 +55,7 @@
   function makeCanvasTexture(draw,w=1280,h=800) {
     const c=document.createElement("canvas"); c.width=w;c.height=h;
     const ctx=c.getContext("2d"); draw(ctx,w,h);
-    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;
+    const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.needsUpdate=true;return t;
   }
   function screenArt(ctx,w,h) {
     ctx.fillStyle="#f7f5ec";ctx.fillRect(0,0,w,h);
