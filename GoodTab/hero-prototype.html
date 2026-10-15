@@ -15,7 +15,7 @@
     var box = document.getElementById("scene-error");
     if (!box) return;
     var message = event.message || (event.target && event.target.src ? "Could not load " + event.target.src : "A prototype script failed.");
-    box.textContent = "3D scene error: " + message;
+    var detail = event.error && event.error.stack ? String(event.error.stack).split("\\n").slice(0, 3).join(" / ") : (event.filename ? event.filename + ":" + event.lineno + ":" + event.colno : "");\n    box.textContent = "3D scene error: " + message + (detail ? " — " + detail : "");
     box.hidden = false;
   }, true);
   window.addEventListener("unhandledrejection", function (event) {
