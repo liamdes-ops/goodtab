@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f4f2e9">
+<meta name="description" content="An isolated GOODTAB 3D laptop hero prototype.">
+<title>GOODTAB — 3D Hero Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="hero-prototype.css">
+<script src="prototype/vendor/three.min.js" defer></script>
+<script src="hero-prototype.js" defer></script>
+</head>
+<body>
+<main class="prototype">
+  <header class="prototype-nav">
+    <a class="brand" href="index.html" aria-label="GOODTAB home">GOODTAB<sup>®</sup></a>
+    <span class="nav-note">INDEPENDENT CREATIVE STUDIO / GOA + EVERYWHERE</span>
+    <a class="nav-link" href="contact.html">LET’S TALK <span>↗</span></a>
+  </header>
+  <section class="hero" aria-label="GOODTAB 3D laptop hero prototype">
+    <div class="copy">
+      <p class="eyebrow"><i></i> WE DESIGN AND DEVELOP DISTINCTIVE WEBSITES</p>
+      <h1>WE MAKE<br>THE WEB<br><span>FEEL ALIVE.</span></h1>
+      <p class="lede">Websites that get your business noticed, trusted, and growing.</p>
+      <div class="actions">
+        <a class="cta" href="contact.html">START YOUR PROJECT <span>↗</span></a>
+        <button class="replay" type="button"><i>▶</i> REPLAY ASSEMBLY</button>
+      </div>
+      <p class="disclaimer">ISOLATED 3D HERO STUDY <b>·</b> NOT YET ON THE HOMEPAGE</p>
+    </div>
+    <div class="scene-wrap">
+      <canvas id="scene" aria-label="Three-dimensional laptop scene with floating website panels"></canvas>
+      <div class="scene-status"><i></i><span>LIVE ASSEMBLY</span><small>WEBSITE COMPONENTS IN MOTION</small></div>
+      <div class="scene-loading" id="loading">PREPARING THE SCENE…</div>
+      <div class="scene-error" id="scene-error" hidden>3D scene failed to initialize. Please reload this preview.</div>
+    </div>
+    <div class="scroll-note"><span>↓</span> A SEPARATE PROTOTYPE — YOUR HOMEPAGE IS UNCHANGED</div>
+  </section>
+</main>
+</body>
+</html>
