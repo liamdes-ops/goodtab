@@ -10,6 +10,31 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="hero-prototype.css">
+<script>
+  window.addEventListener("error", function (event) {
+    var box = document.getElementById("scene-error");
+    if (!box) return;
+    var message = event.message || (event.target && event.target.src ? "Could not load " + event.target.src : "A prototype script failed.");
+    box.textContent = "3D scene error: " + message;
+    box.hidden = false;
+  }, true);
+  window.addEventListener("unhandledrejection", function (event) {
+    var box = document.getElementById("scene-error");
+    if (!box) return;
+    box.textContent = "3D scene error: " + String(event.reason || "Unhandled promise rejection");
+    box.hidden = false;
+  });
+  window.addEventListener("load", function () {
+    window.setTimeout(function () {
+      var loading = document.getElementById("loading");
+      var box = document.getElementById("scene-error");
+      if (loading && !loading.hidden && box) {
+        box.textContent = "3D scene did not start. Check the local Three.js bundle and WebGL support.";
+        box.hidden = false;
+      }
+    }, 5000);
+  });
+</script>
 <script src="prototype/vendor/three.min.js" defer></script>
 <script src="hero-prototype.js" defer></script>
 </head>
