@@ -247,7 +247,7 @@
     display.visible=assembled>0;
     trails.forEach(t=>{
       const pass=(elapsed*.2+t.index*.17)%1;
-      const pt=t.curve.getPointAt(pass);t.bead.position.copy(pt);
+      const pt=t.curve.getPoint(pass);t.bead.position.copy(pt);
       const active=elapsed>panelDefs[t.index].delay?1:.38;
       t.core.material.opacity=active*(.42+.3*Math.sin(now*.004+t.index));
       t.halo.material.opacity=active*.14;
