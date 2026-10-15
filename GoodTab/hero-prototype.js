@@ -197,7 +197,7 @@
     const core=new THREE.Mesh(new THREE.TubeGeometry(curve,64,.009,6,false),new THREE.MeshBasicMaterial({color:0xf0ff9a,transparent:true,opacity:.73,blending:THREE.AdditiveBlending,depthWrite:false}));
     scene.add(halo,core);
     const bead=new THREE.Mesh(new THREE.SphereGeometry(.075,12,10),new THREE.MeshBasicMaterial({color:0xf5ffbf,blending:THREE.AdditiveBlending}));
-    scene.add(bead);trails.push({curve,halo,core,bead,index:i});
+    scene.add(bead);trails.push({curve,halo,core,bead,index:i,start:from.clone(),end:dest.clone()});
   });
 
   // Tiny luminous flecks add volume without competing with the panels.
@@ -247,7 +247,7 @@
     display.visible=assembled>0;
     trails.forEach(t=>{
       const pass=(elapsed*.2+t.index*.17)%1;
-      const pt=t.curve.getPoint(pass);t.bead.position.copy(pt);
+      const pt=new THREE.Vector3().lerpVectors(t.start,t.end,pass);pt.y+=Math.sin(pass*Math.PI)*1.1;t.bead.position.copy(pt);
       const active=elapsed>panelDefs[t.index].delay?1:.38;
       t.core.material.opacity=active*(.42+.3*Math.sin(now*.004+t.index));
       t.halo.material.opacity=active*.14;
