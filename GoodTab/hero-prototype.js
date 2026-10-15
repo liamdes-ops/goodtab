@@ -134,12 +134,12 @@
   const lidBack=roundedPlate(8.55,5.35,.22,.21,silver,.055);lidBack.position.set(0,2.6,-.105);lid.add(lidBack);
   const bezel=roundedPlate(8.25,5.06,.11,.16,dark,.028);bezel.position.set(0,2.63,.055);lid.add(bezel);
   const displayGlass=new THREE.Mesh(new THREE.PlaneGeometry(7.88,4.63),new THREE.MeshPhysicalMaterial({color:0x080a0a,metalness:.16,roughness:.12,clearcoat:1}));
-  displayGlass.position.set(0,2.62,.12);lid.add(displayGlass);
+  displayGlass.position.set(0,2.62,.15);lid.add(displayGlass);
   const display=new THREE.Mesh(new THREE.PlaneGeometry(7.82,4.57),new THREE.MeshBasicMaterial({map:websiteTexture,transparent:true,opacity:0,toneMapped:false}));
-  display.position.set(0,2.62,.126);lid.add(display);
+  display.position.set(0,2.62,.158);lid.add(display);
   // Tiny camera lens and status light.
   const cam=new THREE.Mesh(new THREE.SphereGeometry(.045,16,12),new THREE.MeshPhysicalMaterial({color:0x111923,metalness:.2,roughness:.13,clearcoat:1}));
-  cam.position.set(0,5.11,.15);lid.add(cam);
+  cam.position.set(0,5.11,.19);lid.add(cam);
 
   // Canvas-driven artwork gives each floating panel crisp, locally rendered lettering.
   function panelTexture(kind,w=760,h=500){
@@ -177,7 +177,7 @@
     root.add(plate);
     const tex=panelTexture(d.kind);
     const face=new THREE.Mesh(new THREE.PlaneGeometry(d.w-.1,d.h-.1),new THREE.MeshBasicMaterial({map:tex,transparent:true,toneMapped:false,side:THREE.DoubleSide}));
-    face.position.z=.058;root.add(face);
+    face.position.z=.095;root.add(face);
     const rim=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(d.w,d.h,.11)),new THREE.LineBasicMaterial({color:0x96988e,transparent:true,opacity:.48}));
     root.add(rim);
     root.position.set(...d.start);root.rotation.set(...d.rot);scene.add(root);
