@@ -133,7 +133,7 @@
   const lid=new THREE.Group();lid.position.set(0,-1.34,-2.34);device.add(lid);
   const lidBack=roundedPlate(8.55,5.35,.22,.21,silver,.055);lidBack.position.set(0,2.6,-.105);lid.add(lidBack);
   const bezel=roundedPlate(8.25,5.06,.11,.16,dark,.028);bezel.position.set(0,2.63,.055);lid.add(bezel);
-  const displayGlass=new THREE.Mesh(new THREE.MeshPhysicalMaterial({color:0x080a0a,metalness:.16,roughness:.12,clearcoat:1}),new THREE.PlaneGeometry(7.88,4.63));
+  const displayGlass=new THREE.Mesh(new THREE.PlaneGeometry(7.88,4.63),new THREE.MeshPhysicalMaterial({color:0x080a0a,metalness:.16,roughness:.12,clearcoat:1}));
   displayGlass.position.set(0,2.62,.12);lid.add(displayGlass);
   const display=new THREE.Mesh(new THREE.PlaneGeometry(7.82,4.57),new THREE.MeshBasicMaterial({map:websiteTexture,transparent:true,opacity:0,toneMapped:false}));
   display.position.set(0,2.62,.126);lid.add(display);
