@@ -198,7 +198,7 @@ if (!reducedMotion && page) {
 if (!reducedMotion && document.body.classList.contains('home-page')) {
   document.documentElement.classList.add('js-motion');
   const homeTargets = document.querySelectorAll(
-    '.home-page .hero-copy, .home-page .hero-art, .home-page .section-label, .home-page .intro-grid > *, .home-page .value-card, .home-page .work-heading > *, .home-page .project, .home-page .view-all, .home-page .home-cta > *'
+    '.home-page .hero-copy, .home-page .section-label, .home-page .intro-grid > *, .home-page .value-card, .home-page .work-heading > *, .home-page .project, .home-page .view-all, .home-page .home-cta > *'
   );
   homeTargets.forEach((node, index) => {
     node.classList.add('home-motion');
